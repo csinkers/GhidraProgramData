@@ -1,0 +1,16 @@
+.vs/
+.vscode/
+Debug/
+bin/
+obj/
+
+*.filters
+*.lock
+*.lock~
+*.user
+*.DotSettings
+*.code-workspace
+*.gfxr
+launchSettings.json
+imgui.ini
+
