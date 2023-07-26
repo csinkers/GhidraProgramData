@@ -1,4 +1,4 @@
-﻿namespace GhidraProgramData;
+﻿namespace GhidraProgramData.Types;
 
 public class GNamespace : IGhidraType
 {
@@ -42,7 +42,7 @@ public class GNamespace : IGhidraType
     public bool Sort() // Return true if empty
     {
         Members.Sort((x, y) => Comparer<string>.Default.Compare(x.Key.Name, y.Key.Name));
-        foreach(var ns in Members.OfType<GNamespace>())
+        foreach (var ns in Members.OfType<GNamespace>())
             ns.Sort();
 
         return Members.Count == 0;

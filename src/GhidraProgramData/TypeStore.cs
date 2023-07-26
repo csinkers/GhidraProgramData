@@ -1,21 +1,14 @@
-﻿namespace GhidraProgramData;
+﻿using GhidraProgramData.Types;
+
+namespace GhidraProgramData;
 
 public class TypeStore
 {
     readonly Dictionary<TypeKey, IGhidraType> _types = new();
-    public List<string> Errors { get; } = new();
+
     public List<TypeKey> AllKeys => _types.Keys.ToList();
 
-    public void Add(TypeKey key, IGhidraType type)
-    {
-        _types[key] = type;
-    }
-
-    public void Add(IGhidraType type)
-    {
-        _types[type.Key] = type;
-    }
-
+    internal void Add(IGhidraType type) => _types[type.Key] = type;
     public IGhidraType this[TypeKey key] => Get(key);
     public IGhidraType Get(TypeKey key)
     {
@@ -25,21 +18,21 @@ public class TypeStore
         if (key.Name == "char *")
             return new GPointer(Get(key with { Name = "string" }));
 
-        if (key.Name.EndsWith('*'))
+        if (key.Name.EndsWith('*')) // Construct pointer types on demand
         {
             var result = new GPointer(Get(key with { Name = key.Name[..^1].Trim() }));
-            Add(key, result);
+            _types[key] = result;
             return result;
         }
 
-        int index = key.Name.IndexOf('[');
+        int index = key.Name.IndexOf('['); // Construct array types on demand
         if (index != -1)
         {
             int index2 = key.Name.IndexOf(']');
             var subString = key.Name[(index + 1)..index2];
             var count = uint.Parse(subString);
             var result = new GArray(Get(key with { Name = key.Name[..index] + key.Name[(index2 + 1)..] }), count);
-            Add(key, result);
+            _types[key] = result;
             return result;
         }
 

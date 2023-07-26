@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace GhidraProgramData;
+namespace GhidraProgramData.Types;
 
 public record GFunction(TypeKey Key, uint Address)
 {

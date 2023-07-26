@@ -1,4 +1,4 @@
-﻿namespace GhidraProgramData;
+﻿namespace GhidraProgramData.Types;
 
 public class GGlobal : IGhidraType
 {
@@ -19,7 +19,7 @@ public class GGlobal : IGhidraType
 
     public bool Unswizzle(TypeStore types)
     {
-        if (Type is not GDummy dummy) 
+        if (Type is not GDummy dummy)
             return false;
 
         Type = types.Get(dummy.Key);

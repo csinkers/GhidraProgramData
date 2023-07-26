@@ -1,4 +1,6 @@
-﻿namespace GhidraProgramData;
+﻿using GhidraProgramData.Types;
+
+namespace GhidraProgramData.Directives;
 
 public class DTypeCast : IDirective
 {
@@ -8,7 +10,7 @@ public class DTypeCast : IDirective
     {
         if (Type is not GDummy dummy)
             return false;
-        
+
         Type = types[dummy.Key];
         return true;
     }

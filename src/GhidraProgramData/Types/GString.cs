@@ -1,4 +1,4 @@
-﻿namespace GhidraProgramData;
+﻿namespace GhidraProgramData.Types;
 
 public class GString : IGhidraType
 {

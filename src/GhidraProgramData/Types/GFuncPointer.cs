@@ -1,4 +1,4 @@
-﻿namespace GhidraProgramData;
+﻿namespace GhidraProgramData.Types;
 
 public class GFuncPointer : IGhidraType
 {
@@ -24,7 +24,7 @@ public class GFuncPointer : IGhidraType
             changed = true;
         }
 
-        foreach(var p in Parameters)
+        foreach (var p in Parameters)
             changed |= p.Unswizzle(types);
         return changed;
     }

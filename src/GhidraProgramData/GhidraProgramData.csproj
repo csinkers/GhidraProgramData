@@ -14,7 +14,7 @@
     <PackageProjectUrl>https://github.com/csinkers/GhidraProgramData</PackageProjectUrl>
     <RepositoryUrl>https://github.com/csinkers/GhidraProgramData</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <Version>0.1.0</Version>
+    <Version>0.1.1</Version>
   </PropertyGroup>
 
 </Project>

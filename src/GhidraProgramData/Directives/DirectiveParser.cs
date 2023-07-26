@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
+using GhidraProgramData.Types;
 
-namespace GhidraProgramData;
+namespace GhidraProgramData.Directives;
 
 public class DirectiveParser
 {
@@ -14,7 +15,7 @@ public class DirectiveParser
     */
     static readonly Regex CastRegex = new(@"cast\(([^,]+),(.+)\)");
     static readonly Regex GfxRegex = new(@"gfx8\(([^,]+),([^,]+),([^,]+),([^,]+)\)");
-    public DirectiveParser(Func<TypeKey, IGhidraType> buildDummyType) 
+    public DirectiveParser(Func<TypeKey, IGhidraType> buildDummyType)
         => _buildDummyType = buildDummyType ?? throw new ArgumentNullException(nameof(buildDummyType));
 
     public IEnumerable<IDirective> TryParse(string comment, string memberName)
@@ -34,7 +35,7 @@ public class DirectiveParser
     IDirective? TryParseCast(string comment)
     {
         var castMatch = CastRegex.Match(comment);
-        if (!castMatch.Success) 
+        if (!castMatch.Success)
             return null;
 
         var path = castMatch.Groups[1].Value;
@@ -54,7 +55,7 @@ public class DirectiveParser
     static IDirective? TryParseGfx(string comment, string memberName)
     {
         var castMatch = GfxRegex.Match(comment);
-        if (!castMatch.Success) 
+        if (!castMatch.Success)
             return null;
 
         var width = castMatch.Groups[1].Value.Trim();

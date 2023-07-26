@@ -1,4 +1,4 @@
-﻿namespace GhidraProgramData;
+﻿namespace GhidraProgramData.Types;
 
 public class GPointer : IGhidraType
 {
@@ -19,7 +19,7 @@ public class GPointer : IGhidraType
     {
         if (Type is not GDummy dummy)
             return false;
-        
+
         Type = types[dummy.Key];
         return true;
     }

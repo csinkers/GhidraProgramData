@@ -1,4 +1,4 @@
-﻿namespace GhidraProgramData;
+﻿namespace GhidraProgramData.Directives;
 
 public record DTargetChild(string Path, IDirective Directive) : IDirective
 {
