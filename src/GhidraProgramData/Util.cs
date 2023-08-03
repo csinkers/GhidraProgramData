@@ -101,4 +101,54 @@ public static class Util
         ArrayPool<int>.Shared.Return(matrix);
         return result;
     }
+
+    public static int NextPowerOfTwo(int x) => (int)Math.Pow(2.0, Math.Ceiling(Math.Log(x, 2.0)));
+
+    public delegate void LineEnumerationCallback(long offset, ReadOnlySpan<byte> line);
+    // Goes through the file and calls the callback for each line found, along with the first 'maxLength' characters of the line (may include newlines / parts of subsequent lines).
+    public static void EnumerateLines(Stream stream, int maxLength, LineEnumerationCallback callback)
+    {
+        var buf = new byte[maxLength < 4096 ? 4096 : NextPowerOfTwo(maxLength)];
+        long chunkOffset = 0;
+        long lastLine = 0;
+        var lineBuffer = new byte[maxLength];
+        int remainder = maxLength;
+
+        int bytesRead;
+        do
+        {
+            bytesRead = stream.Read(buf);
+            var span = buf.AsSpan();
+
+            if (remainder > 0)
+            {
+                span[..remainder].CopyTo(lineBuffer.AsSpan()[(maxLength-remainder)..]);
+                remainder = 0;
+            }
+
+            long offset = chunkOffset;
+            int i;
+            while ((i = span.IndexOf((byte)'\n')) != -1)
+            {
+                span = span[(i + 1)..];
+                offset += i + 1;
+
+                callback(lastLine, lineBuffer);
+
+                lastLine = offset;
+                if (span.Length > maxLength)
+                {
+                    span[..maxLength].CopyTo(lineBuffer);
+                    remainder = 0;
+                }
+                else
+                {
+                    span.CopyTo(lineBuffer);
+                    remainder = maxLength - span.Length;
+                }
+            }
+
+            chunkOffset += bytesRead;
+        } while (bytesRead == buf.Length);
+    }
 }
