@@ -11,11 +11,13 @@ public class ProgramData
         Functions = functions ?? throw new ArgumentNullException(nameof(functions));
         FunctionsByName = functionsByName ?? throw new ArgumentNullException(nameof(functionsByName));
         Types = types ?? throw new ArgumentNullException(nameof(types));
+        SymbolsByName = Symbols.ToLookup(x => x.Key);
     }
 
     public GNamespace Root { get; }
     public GFunction[] Functions { get; } // All functions ordered by address
     public Dictionary<TypeKey, GFunction> FunctionsByName { get; }
+    public ILookup<TypeKey, Symbol> SymbolsByName { get; }
     public Symbol[] Symbols { get; } // All symbols ordered by address
     public TypeStore Types { get; }
 
@@ -33,6 +35,12 @@ public class ProgramData
         using var asciiSr = asciiDisassemblyStream == null ? null : new StreamReader(asciiDisassemblyStream);
         var loader = new ProgramDataLoader();
         return loader.Load(xmlSr, asciiSr, functionFilter);
+    }
+
+    public Symbol? LookupSymbol(string name)
+    {
+        var key = TypeKey.Parse(name);
+        return SymbolsByName.Contains(key) ? SymbolsByName[key].First() : null;
     }
 
     public Symbol? LookupSymbol(uint address)
