@@ -9,7 +9,7 @@ namespace GhidraProgramData;
 public class DecompilationResults : IDisposable
 {
     readonly Dictionary<uint, long> _functionFileOffsets;
-    readonly FileStream _stream;
+    readonly Stream _stream;
     readonly StreamReader _streamReader;
 
     public static DecompilationResults Load(string path)
@@ -18,9 +18,10 @@ public class DecompilationResults : IDisposable
         return new DecompilationResults(stream);
     }
 
-    DecompilationResults(FileStream stream)
+    public static DecompilationResults Load(Stream stream) => new(stream);
+
+    DecompilationResults(Stream stream)
     {
-        // using var stream = File.Open(path, FileMode.Open, FileAccess.Read);
         _stream = stream ?? throw new ArgumentNullException(nameof(stream));
         _streamReader = new StreamReader(stream, null, true, -1, true);
         _stream.Position = 0;
