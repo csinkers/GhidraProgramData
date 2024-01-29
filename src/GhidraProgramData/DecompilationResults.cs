@@ -14,7 +14,7 @@ public class DecompilationResults : IDisposable
 
     public static DecompilationResults Load(string path)
     {
-        var stream = File.Open(path, FileMode.Open, FileAccess.Read);
+        var stream = File.Open(path, FileMode.Open, FileAccess.Read, FileShare.Read);
         return new DecompilationResults(stream);
     }
 
