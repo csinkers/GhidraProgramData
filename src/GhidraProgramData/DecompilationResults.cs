@@ -6,7 +6,7 @@ namespace GhidraProgramData;
 /// <summary>
 /// Loads decompiled C-code exported by https://github.com/csinkers/GhidraLizardExport
 /// </summary>
-public class DecompilationResults : IDisposable
+public sealed class DecompilationResults : IDisposable
 {
     readonly Dictionary<uint, long> _functionFileOffsets;
     readonly Stream _stream;

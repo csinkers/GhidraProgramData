@@ -6,7 +6,7 @@ using GhidraProgramData.Types;
 
 namespace GhidraProgramData;
 
-class ProgramDataLoader
+internal sealed class ProgramDataLoader
 {
     static readonly Regex CallLineRegex = new(@"^([0-9a-f]{8})\s+[0-9a-f]+\s+CALL\s+([^ ]+)\s+$", RegexOptions.Compiled);
     readonly record struct CallInfo(uint Address, string Target);
@@ -241,7 +241,7 @@ class ProgramDataLoader
         }
     }
 
-    void LoadSymbols(XmlDocument doc, Dictionary<uint, Symbol> symbols)
+    static void LoadSymbols(XmlDocument doc, Dictionary<uint, Symbol> symbols)
     {
         foreach (XmlNode sym in doc.SelectNodes("/PROGRAM/SYMBOL_TABLE/SYMBOL")!)
         {
@@ -402,7 +402,7 @@ class ProgramDataLoader
     static uint? HexAttrib(XmlNode node, string name)
     {
         var value = node.Attributes![name]?.Value ?? throw new InvalidOperationException($"Attribute {name} was not found on node {node}!");
-        if (value.Contains(":")) // Skip entries like .image::OTHER:00000000 for headers in LE EXEs
+        if (value.Contains(':')) // Skip entries like .image::OTHER:00000000 for headers in LE EXEs
             return null;
 
         return uint.Parse(value, NumberStyles.HexNumber);
