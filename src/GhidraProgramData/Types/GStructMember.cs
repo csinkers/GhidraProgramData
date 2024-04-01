@@ -2,12 +2,13 @@
 
 public class GStructMember
 {
+    List<IDirective>? _directives;
     public string Name { get; }
     public IGhidraType Type { get; private set; }
     public uint Offset { get; }
     public uint Size { get; }
     public string? Comment { get; }
-    public List<IDirective>? Directives { get; set; }
+    public IReadOnlyList<IDirective> Directives => _directives == null ? Array.Empty<IDirective>() : _directives;
 
     public GStructMember(string name, IGhidraType type, uint offset, uint size, string? comment)
     {
@@ -23,12 +24,23 @@ public class GStructMember
 
     public override string ToString() => $"{Offset:X}: {Type.Key.Name} {Name} ({Size:X}){(Comment == null ? "" : " // " + Comment)}";
 
+    public void AddDirective(IDirective directive)
+    {
+        _directives ??= new List<IDirective>();
+        _directives.Add(directive);
+    }
+
+    public void AddDirectives(IEnumerable<IDirective> directives)
+    {
+        foreach (var directive in directives)
+            AddDirective(directive);
+    }
+
     public bool Unswizzle(TypeStore types)
     {
         bool result = false;
-        if (Directives != null)
-            foreach (var directive in Directives)
-                result |= directive.Unswizzle(types);
+        foreach (var directive in Directives)
+            result |= directive.Unswizzle(types);
 
         if (Type is not GDummy dummy)
             return result;

@@ -43,9 +43,7 @@ internal sealed class ProgramDataLoader
             foreach (var member in structType.Members)
             {
                 if (member.Comment == null) continue;
-                member.Directives = parser.TryParse(member.Comment, member.Name).ToList();
-                if (member.Directives.Count == 0)
-                    member.Directives = null;
+                member.AddDirectives(parser.TryParse(member.Comment, member.Name));
             }
         }
 
@@ -139,8 +137,8 @@ internal sealed class ProgramDataLoader
             var type = StrAttrib(typeDef, "DATATYPE") ?? "";
             var alias = new GTypeAlias(key, BuildDummyType(new(dtns, type)));
 
-            var existing = _types.Get(key);
-            if (existing != null && existing is not GDummy)
+            IGhidraType existing = _types.Get(key);
+            if (existing is not GDummy)
             {
                 if (existing is not GPrimitive)
                     throw new InvalidOperationException($"The type {ns}/{name} is already defined as {existing}");
