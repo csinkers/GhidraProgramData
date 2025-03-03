@@ -88,6 +88,7 @@ public class StructTests
             <MEMBER OFFSET=""0x10"" DATATYPE=""alloc_t *"" DATATYPE_NAMESPACE=""/Albion/Memory"" NAME=""allocation"" SIZE=""0x4"" />
         </STRUCTURE>
 ";
+
     [Fact]
     public void AlbionAllocTest()
     {

@@ -5,6 +5,8 @@ VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhidraProgramData", "src\GhidraProgramData\GhidraProgramData.csproj", "{C10D67AF-9FCE-495C-A0E6-43AFB12D9D5F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GhidraProgramData.Tests", "src\GhidraProgramData.Tests\GhidraProgramData.Tests.csproj", "{742F8CE4-2D7D-45BE-8627-7424405D6F7F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{C10D67AF-9FCE-495C-A0E6-43AFB12D9D5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C10D67AF-9FCE-495C-A0E6-43AFB12D9D5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C10D67AF-9FCE-495C-A0E6-43AFB12D9D5F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{742F8CE4-2D7D-45BE-8627-7424405D6F7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{742F8CE4-2D7D-45BE-8627-7424405D6F7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{742F8CE4-2D7D-45BE-8627-7424405D6F7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{742F8CE4-2D7D-45BE-8627-7424405D6F7F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
