@@ -20,7 +20,9 @@
     <RepositoryUrl>https://github.com/csinkers/GhidraProgramData</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
 
+    <!-- Commented until comments have been added
     <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    -->
     <EmbedAllSources>true</EmbedAllSources>
     <DebugType>Embedded</DebugType>
   </PropertyGroup>
