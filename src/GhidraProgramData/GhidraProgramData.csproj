@@ -3,16 +3,39 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+
+    <Title>GhidraProgramData</Title>
     <Authors>Cam Sinclair</Authors>
-    <Company />
     <Description>A C# library for loading Ghidra program data that has been exported to XML</Description>
     <Copyright>2023 Cam Sinclair</Copyright>
+
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>GhidraProgramData</PackageId>
     <PackageTags>ghidra</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/csinkers/GhidraProgramData</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
     <RepositoryUrl>https://github.com/csinkers/GhidraProgramData</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <Version>0.1.3</Version>
+
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <EmbedAllSources>true</EmbedAllSources>
+    <DebugType>Embedded</DebugType>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
 </Project>
