@@ -10,6 +10,7 @@ public class TypeStore
 
     internal void Add(IGhidraType type) => _types[type.Key] = type;
     public IGhidraType this[TypeKey key] => Get(key);
+    public IGhidraType this[string key] => Get(TypeKey.Parse(key));
     public IGhidraType Get(TypeKey key)
     {
         if (_types.TryGetValue(key, out var type))

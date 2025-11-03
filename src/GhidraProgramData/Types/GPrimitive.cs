@@ -11,7 +11,7 @@ public class GPrimitive : IGhidraType
         _size = size;
     }
 
-    public TypeKey Key => new("/", _name);
+    public TypeKey Key => new("", _name);
     public uint? FixedSize => _size;
     public string? BuildPath(string accum, string relative) => null;
     public override string ToString() => _name;
