@@ -74,7 +74,7 @@ internal static class PackedBase64Offsets
         return sb.ToString();
     }
 
-    public static int[] Decode(string s)
+    public static int[] Decode(ReadOnlySpan<char> s)
     {
         static bool TryGetDigit(char c, out int n)
         {

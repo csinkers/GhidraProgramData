@@ -104,7 +104,7 @@ public static class Util
 
     public static int NextPowerOfTwo(int x) => (int)Math.Pow(2.0, Math.Ceiling(Math.Log(x, 2.0)));
 
-    public delegate void LineEnumerationCallback(long offset, ReadOnlySpan<byte> line);
+    public delegate void LineEnumerationCallback(long offset, int lineNumber, ReadOnlySpan<byte> line);
     // Goes through the file and calls the callback for each line found, along with the first 'maxLength' characters of the line (may include newlines / parts of subsequent lines).
     public static void EnumerateLines(Stream stream, int maxLength, LineEnumerationCallback callback)
     {
@@ -115,6 +115,7 @@ public static class Util
         int remainder = maxLength;
 
         int bytesRead;
+        int lineNumber = 1;
         do
         {
             bytesRead = stream.Read(buf);
@@ -133,7 +134,7 @@ public static class Util
                 span = span[(i + 1)..];
                 offset += i + 1;
 
-                callback(lastLine, lineBuffer);
+                callback(lastLine, lineNumber, lineBuffer);
 
                 lastLine = offset;
                 if (span.Length > maxLength)
@@ -146,6 +147,8 @@ public static class Util
                     span.CopyTo(lineBuffer);
                     remainder = maxLength - span.Length;
                 }
+
+                lineNumber++;
             }
 
             chunkOffset += bytesRead;

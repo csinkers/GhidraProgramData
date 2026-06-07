@@ -3,12 +3,14 @@ using System.Text;
 
 namespace GhidraProgramData;
 
+record struct FunctionOffset(long Offset, int LineNumber);
+
 /// <summary>
 /// Loads decompiled C-code exported by https://github.com/csinkers/GhidraLizardExport
 /// </summary>
 public sealed class DecompilationResults : IDisposable
 {
-    readonly Dictionary<uint, long> _functionFileOffsets;
+    readonly Dictionary<uint, FunctionOffset> _functionFileOffsets;
     readonly Stream _stream;
     readonly StreamReader _streamReader;
 
@@ -33,36 +35,48 @@ public sealed class DecompilationResults : IDisposable
         if (!_functionFileOffsets.TryGetValue(address, out var offset))
             return null;
 
-        _stream.Position = offset;
+        _stream.Position = offset.Offset;
         _streamReader.DiscardBufferedData();
-        var metaLine = _streamReader.ReadLine();
-        if (metaLine == null || !metaLine.StartsWith(Pattern))
+
+        MetadataLine meta = default;
+        var firstLine = _streamReader.ReadLine();
+        if (firstLine == null || !MetadataLine.TryParse(ref meta, firstLine))
             return null;
 
-        if (metaLine.Length < Pattern.Length + 8)
-            return null;
-
-        string packedOffsets = metaLine[(Pattern.Length + 9)..]; // pattern + 8 chars for 32-bit hex number + 1 one more for a space, then the packed offsets start
-        int[] offsets = PackedBase64Offsets.Decode(packedOffsets);
-        uint[] lineAddresses = PackedBase64Offsets.ConvertToAbsolute(address, offsets);
-        string[] lines = new string[lineAddresses.Length];
-
+        string[] lines = new string[meta.LineAddresses.Length];
         for(int i = 0; i < lines.Length; i++)
             lines[i] = _streamReader.ReadLine()!;
 
-        return new DecompiledFunction(address, lines, lineAddresses);
+        return new DecompiledFunction(
+            address,
+            offset.LineNumber,
+            meta.Name,
+            lines,
+            meta.LineAddresses,
+            meta.StackOffset,
+            meta.ExitPoints
+        );
     }
 
-    const string Pattern = "//!L! ";
-    static Dictionary<uint, long> IndexFunctions(Stream stream)
+    public IEnumerable<DecompiledFunction> EnumerateFunctions()
     {
-        byte[] pattern = Encoding.UTF8.GetBytes(Pattern);
-        var lines = new Dictionary<uint, long>();
+        foreach (var address in _functionFileOffsets.Keys)
+        {
+            var func = TryGetFunction(address);
+            if (func != null)
+                yield return func;
+        }
+    }
 
-        Util.EnumerateLines(stream, pattern.Length + 8, (offset, line) =>
+    static Dictionary<uint, FunctionOffset> IndexFunctions(Stream stream)
+    {
+        byte[] pattern = Encoding.UTF8.GetBytes(MetadataLine.Pattern);
+        var lines = new Dictionary<uint, FunctionOffset>();
+
+        Util.EnumerateLines(stream, pattern.Length + 8, (offset, lineNumber, line) =>
         {
             if (line.StartsWith(pattern) && Utf8Parser.TryParse(line[pattern.Length..], out uint funcAddress, out _, 'x'))
-                lines[funcAddress] = offset;
+                lines[funcAddress] = new FunctionOffset(offset, lineNumber);
         });
 
         return lines;

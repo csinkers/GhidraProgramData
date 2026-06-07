@@ -2,5 +2,10 @@
 
 public record DecompiledFunction(
     uint Address,
+    int FirstLineNumber,
+    string Name,
     string[] Lines,
-    uint[] LineAddresses);
+    uint[] LineAddresses,
+    uint StackOffset,
+    uint[] ExitPoints
+);
