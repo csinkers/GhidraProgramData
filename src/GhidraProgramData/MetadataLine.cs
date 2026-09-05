@@ -43,8 +43,12 @@ public struct MetadataLine
                     break;
 
                 case 3: // stackOffset
+                    if (part.Start.Value == part.End.Value)
+                        break;
+
                     if (!uint.TryParse(line[part], NumberStyles.HexNumber, null, out result.StackOffset))
                         return false;
+
                     break;
 
                 case 4: // exitPoints
